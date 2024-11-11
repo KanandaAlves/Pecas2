@@ -1,0 +1,85 @@
+﻿@model Pecas2.Models.ItemPedido
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ItemPedido</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PedidoId" class="control-label"></label>
+                <select asp-for="PedidoId" class ="form-control" asp-items="ViewBag.PedidoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProdutoId" class="control-label"></label>
+                <select asp-for="ProdutoId" class ="form-control" asp-items="ViewBag.ProdutoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantidade" class="control-label"></label>
+                 <input asp-for="Quantidade" class="form-control quantidade" oninput="updateTotal()" />
+                <span asp-validation-for="Quantidade" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+       function updateTotal() {
+            var totalFinal = 0; // Inicializa o total final
+
+            var produtoItem = $(".produto-item");
+            produtoItem.each(function () {
+                var quantidade = parseFloat($(this).find(".quantidade").val()); // Garante que seja um número
+                var preco = parseFloat($(this).find(".produto-id option:selected").data("preco"));
+
+                if (!isNaN(quantidade) && !isNaN(preco)) {
+                    var total = quantidade * preco;
+                    $(this).find(".total").val(total.toFixed(2));
+                    totalFinal += total; // Adiciona ao total final
+                } else {
+                    $(this).find(".total").val("0.00");
+                }
+            });
+
+            // Atualiza o campo de Total Final
+            $("#total-final").val(totalFinal.toFixed(2));
+        }
+
+        // Adiciona um novo produto
+        $("#add-produto").click(function () {
+            var produtoItem = $(".produto-item:first").clone();
+            produtoItem.find(".quantidade").val(1); // Reseta a quantidade
+            produtoItem.find(".total").val(0); // Reseta o total
+            produtoItem.appendTo("#produtos-container");
+            updateTotal();
+        });
+
+        // Atualiza o total sempre que a quantidade mudar
+        $(document).on("input", ".quantidade", function () {
+            updateTotal();
+        });
+
+        // Atualiza o total quando o produto for alterado
+        $(document).on("change", ".produto-id", function () {
+            var preco = $(this).find("option:selected").data("preco");
+            console.log("Preço selecionado:", preco); // Verifique o preço no console
+            updateTotal();
+        });
+    </script>
+   
+}

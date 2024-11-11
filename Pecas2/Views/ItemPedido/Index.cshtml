@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Pecas2.Models.ItemPedido>
+
+@{
+    ViewData["Title"] = "ItemPedido";
+}
+
+<h1>ItemPedido</h1>
+
+<p>
+    <a asp-action="Create">Criar Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Pedido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Produto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subtotal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Pedido.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Produto.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.Quantidade)</td>
+                <td>@Html.DisplayFor(modelItem => item.Subtotal)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { pedidoId = item.PedidoId, produtoId = item.ProdutoId }) |
+                    @Html.ActionLink("Details", "Details", new { pedidoId = item.PedidoId, produtoId = item.ProdutoId }) |
+                    @Html.ActionLink("Delete", "Delete", new { pedidoId = item.PedidoId, produtoId = item.ProdutoId })
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
